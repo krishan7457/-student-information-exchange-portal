@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LPU Student Exchange Information Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        :root {
+            --lpu-orange: #F37021;
+            --lpu-dark: #231F20;
+        }
+        body {
+            background-color: #f9fafb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- TOP HEADER BAR -->
+    <header class="bg-[#231F20] text-white shadow-md">
+        <div class="max-content mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center max-w-7xl">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <div class="bg-[#F37021] text-white font-black px-4 py-2 rounded text-xl tracking-wider shadow">
+                    LPU
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">Lovely Professional University</h1>
+                    <p class="text-xs text-gray-400">Division of International Affairs | Student Exchange Portal</p>
+                </div>
+            </div>
+          
+        </div>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-xs">
+        <div class="max-w-7xl mx-auto px-6 flex space-x-2">
+            <button onclick="switchTab('explore-tab')" id="nav-explore-tab" class="tab-btn py-4 px-4 font-semibold text-sm border-b-2 border-[#F37021] text-[#F37021] transition-all">
+                🌐 Explore Exchange Programs
+            </button>
+            <button onclick="switchTab('dashboard-tab')" id="nav-dashboard-tab" class="tab-btn py-4 px-4 font-semibold text-sm border-b-2 border-transparent text-gray-500 hover:text-[#F37021] transition-all">
+                📊 Student Dashboard & Apply
+            </button>
+            <button onclick="switchTab('admin-tab')" id="nav-admin-tab" class="tab-btn py-4 px-4 font-semibold text-sm border-b-2 border-transparent text-gray-500 hover:text-[#F37021] transition-all">
+                🛠️ LPU Administration Desk
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN BODY CONTAINER -->
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        
+        <!-- SECTION 1: EXPLORE PROGRAMS -->
+        <section id="explore-tab" class="tab-content block animate-fadeIn">
+            <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white p-6 rounded-xl shadow-xs border border-gray-100">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Partner Institutions Matrix</h2>
+                    <p class="text-sm text-gray-500 mt-1">Review active international university frameworks, semester deadlines, and qualifying criteria.</p>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <input type="text" id="search-bar" oninput="filterPrograms()" placeholder="Search partner university or country..." class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#F37021] w-64">
+                    <select id="filter-region" onchange="filterPrograms()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#F37021]">
+                        <option value="">All Regions</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="USA">United States</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Europe">Europe</option>
+                        <option value="Asia">Asia</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Program Cards Grid -->
+            <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Program Cards injected via Javascript -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: STUDENT DASHBOARD -->
+        <section id="dashboard-tab" class="tab-content hidden animate-fadeIn">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Left 1 Column: Saved & Shortlisted Programs -->
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-xs border border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                            <span class="mr-2">⭐</span> Saved Program Tracks
+                        </h3>
+                        <div id="saved-programs-list" class="space-y-3 text-sm text-gray-500">
+                            <!-- Injected Dynamically -->
+                            <p class="italic text-center py-4 bg-gray-50 rounded-lg">No shortlists saved. Navigate to "Explore Programs" to pin preferences.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-xs border border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                            <span class="mr-2">📋</span> Document Eligibility Checklist
+                        </h3>
+                        <ul class="space-y-2 text-xs text-gray-600">
+                            <li class="flex items-start"><span class="text-[#F37021] mr-2">✔</span> Official LPU Academic Transcripts (No Active Backlogs)</li>
+                            <li class="flex items-start"><span class="text-[#F37021] mr-2">✔</span> Statement of Purpose (SOP) tailored to host syllabus</li>
+                            <li class="flex items-start"><span class="text-[#F37021] mr-2">✔</span> No Objection Certificate (NOC) from Head of Department</li>
+                            <li class="flex items-start"><span class="text-[#F37021] mr-2">✔</span> Valid Passport copy (min 6 months validity from departure)</li>
+                            <li class="flex items-start"><span class="text-[#F37021] mr-2">✔</span> English Proficiency Proof (IELTS/TOEFL if mandatory)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right 2 Columns: Application Submission & Status tracking -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Wizard Form -->
+                    <div class="bg-white p-6 rounded-xl shadow-xs border border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Submit Fresh Exchange Application</h3>
+                        <p class="text-xs text-gray-500 mb-6">Complete file routing fields to initiate international verification pathways.</p>
+                        
+                        <form id="application-form" onsubmit="submitApplication(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Full Name</label>
+                                <input type="text" id="app-name" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-[#F37021] focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">LPU Registration Number</label>
+                                <input type="text" id="app-regno" placeholder="e.g., 12611547" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-[#F37021] focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Current CGPA Score</label>
+                                <input type="number" id="app-cgpa" step="0.01" min="0" max="10" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-[#F37021] focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Target Exchange University</label>
+                                <select id="app-target" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-[#F37021] focus:outline-none">
+                                    <!-- Options populated dynamically from program list -->
+                                </select>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">SOP / Statement of Purpose Preview</label>
+                                <textarea id="app-sop" rows="3" placeholder="Provide a brief explanation outlining your educational and research objectives..." required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-[#F37021] focus:outline-none"></textarea>
+                            </div>
+                            <div class="md:col-span-2 flex justify-end">
+                                <button type="submit" class="bg-[#F37021] text-white font-semibold text-sm px-6 py-2.5 rounded shadow hover:bg-orange-600 transition-colors cursor-pointer">
+                                    🚀 File Application Data
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Submission Records Tracker -->
+                    <div class="bg-white p-6 rounded-xl shadow-xs border border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Your Filed Applications</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                                    <tr>
+                                        <th class="py-3 px-4">Tracking ID</th>
+                                        <th class="py-3 px-4">Target University</th>
+                                        <th class="py-3 px-4">Date Submitted</th>
+                                        <th class="py-3 px-4">Review Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="student-applications-table">
+                                    <!-- Injected dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: ADMINISTRATIVE INTERFACE -->
+        <section id="admin-tab" class="tab-content hidden animate-fadeIn">
+            <div class="space-y-8">
+                
+                <!-- Incoming Student Submissions Evaluation Board -->
+                <div class="bg-white p-6 rounded-xl shadow-xs border border-gray-100">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-2">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Global Applications Verification Console</h3>
+                            <p class="text-xs text-gray-500">Review incoming cross-institutional applications from internal LPU sections.</p>
+                        </div>
+                        <button onclick="clearAllData()" class="text-xs text-red-600 border border-red-200 hover:bg-red-50 px-3 py-1.5 rounded transition-colors cursor-pointer">
+                            ⚠️ Factory Reset Database State
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="py-3 px-4">Reg No</th>
+                                    <th class="py-3 px-4">Student Name</th>
+                                    <th class="py-3 px-4">CGPA</th>
+                                    <th class="py-3 px-4">Target University</th>
+                                    <th class="py-3 px-4">SOP / Statement Abstract</th>
+                                    <th class="py-3 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-applications-table">
+                                <!-- Injected dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Create/Add Program Offer Form -->
+                <div class="bg-white p-6 rounded-xl shadow-xs border border-gray-100 max-w-3xl">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Publish New Global Exchange Framework</h3>
+                    <p class="text-xs text-gray-500 mb-4">Introduce alternative partner universities directly inside student matrix parameters.</p>
+                    
+                    <form id="add-program-form" onsubmit="createNewProgram(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">University Name</label>
+                            <input type="text" id="new-univ" placeholder="e.g., Stanford University" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-[#F37021] focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Region / Country</label>
+                            <input type="text" id="new-region" placeholder="e.g., USA" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-[#F37021] focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Minimum CGPA Cutoff</label>
+                            <input type="number" id="new-cgpa" step="0.1" min="0" max="10" placeholder="e.g., 8.0" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-[#F37021] focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Application Deadline</label>
+                            <input type="date" id="new-deadline" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-[#F37021] focus:outline-none">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Program Details & Features</label>
+                            <input type="text" id="new-details" placeholder="e.g., Full tuition waivers, architectural course alignments, funded dorm stipends" required class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-[#F37021] focus:outline-none">
+                        </div>
+                        <div class="md:col-span-2 flex justify-end">
+                            <button type="submit" class="bg-gray-900 text-white font-semibold text-sm px-5 py-2 rounded shadow hover:bg-black transition-colors cursor-pointer">
+                                ➕ Append to Main Matrix
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL OVERLAY: FULL CHECKLIST PREVIEW -->
+    <div id="checklist-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+                <h4 id="modal-title" class="text-lg font-bold text-gray-900">Program Criteria Specifics</h4>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold focus:outline-none">&times;</button>
+            </div>
+            <div class="space-y-3 text-sm text-gray-600" id="modal-body-content">
+                <!-- Generated context items -->
+            </div>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeModal()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded text-xs transition-colors">
+                    Close Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE STORAGE & ACTIONS CONTROLLER CODE -->
+    <script>
+        // Initial Default Program Datasets
+        const defaultPrograms = [
+            { id: 1, university: "University of Oxford", country: "UK", region: "UK", cgpa: 8.5, deadline: "2027-04-15", details: "Rhodes scholarship alignments, primary humanities & advanced research tracks available." },
+            { id: 2, university: "University of British Columbia", country: "Canada", region: "Canada", cgpa: 7.5, deadline: "2027-05-20", details: "STEM credit transfer program mapping, modern waterfront campus housing packages." },
+            { id: 3, university: "National University of Singapore", country: "Singapore", region: "Asia", cgpa: 8.0, deadline: "2027-03-30", details: "Data analysis focus, full tuition adjustments, integrated computational labs." },
+            { id: 4, university: "Technical University of Munich", country: "Germany", region: "Europe", cgpa: 7.8, deadline: "2027-06-01", details: "Automotive engineering and robotics specialization, structural industry linkages." },
+            { id: 5, university: "University of California, Berkeley", country: "USA", region: "USA", cgpa: 9.0, deadline: "2027-04-01", details: "Silicon Valley exposure frameworks, tech incubator access, machine learning courses." }
+        ];
+
+        // State variables initialized using local storage structures
+        let programs = JSON.parse(localStorage.getItem('lpu_exchange_programs')) || defaultPrograms;
+        let applications = JSON.parse(localStorage.getItem('lpu_exchange_apps')) || [];
+        let shortlists = JSON.parse(localStorage.getItem('lpu_exchange_shortlists')) || [];
+
+        // Save active arrays safely into browser local storage layers
+        function syncStorage() {
+            localStorage.setItem('lpu_exchange_programs', JSON.stringify(programs));
+            localStorage.setItem('lpu_exchange_apps', JSON.stringify(applications));
+            localStorage.setItem('lpu_exchange_shortlists', JSON.stringify(shortlists));
+        }
+
+        // Tab layout switcher routine
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-[#F37021]', 'text-[#F37021]');
+                btn.classList.add('border-transparent', 'text-gray-500');
+            });
+
+            const activeNav = document.getElementById('nav-' + tabId);
+            activeNav.classList.remove('border-transparent', 'text-gray-500');
+            activeNav.classList.add('border-[#F37021]', 'text-[#F37021]');
+        }
+
+        // Dynamic visual generation for Program Cards
+        function renderPrograms(dataset = programs) {
+            const container = document.getElementById('programs-grid');
+            container.innerHTML = '';
+
+            if(dataset.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 bg-white border border-dashed rounded-xl">No international partner frameworks match your filters.</div>`;
+                return;
+            }
+
+            dataset.forEach(prog => {
+                const isSaved = shortlists.includes(prog.id);
+                container.innerHTML += `
+                    <div class="bg-white rounded-xl shadow-xs border border-gray-100 p-5 hover:shadow-md transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="bg-orange-50 text-[#F37021] text-xs font-bold px-2.5 py-1 rounded">
+                                    📍 ${prog.country}
+                                </span>
+                                <button onclick="toggleShortlist(${prog.id})" class="text-lg focus:outline-none cursor-pointer" title="Bookmark Program">
+                                    ${isSaved ? '⭐' : '☆'}
+                                </button>
+                            </div>
+                            <h4 class="text-lg font-bold text-gray-900">${prog.university}</h4>
+                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">${prog.details}</p>
+                            
+                            <div class="grid grid-cols-2 gap-2 my-4 bg-gray-50 p-3 rounded-lg text-xs">
+                                <div>
+                                    <span class="text-gray-400 block">Min Cutoff</span>
+                                    <span class="font-semibold text-gray-700">${prog.cgpa} CGPA</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-400 block">Last Date</span>
+                                    <span class="font-semibold text-red-600">${prog.deadline}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 pt-2 border-t border-gray-100">
+                            <button onclick="openChecklistModal(${prog.id})" class="w-full text-center border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-semibold py-2 rounded-lg transition-colors cursor-pointer">
+                                View Checklist
+                            </button>
+                            <button onclick="quickApplySelect('${prog.university}')" class="w-full text-center bg-[#231F20] hover:bg-black text-white text-xs font-semibold py-2 rounded-lg transition-colors cursor-pointer">
+                                Apply Direct
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Search and Category sorting pipeline logic
+        function filterPrograms() {
+            const query = document.getElementById('search-bar').value.toLowerCase();
+            const region = document.getElementById('filter-region').value;
+
+            const filtered = programs.filter(p => {
+                const matchesQuery = p.university.toLowerCase().includes(query) || p.country.toLowerCase().includes(query);
+                const matchesRegion = region === "" || p.region === region;
+                return matchesQuery && matchesRegion;
+            });
+            renderPrograms(filtered);
+        }
+
+        // Toggle shortlisting tracks
+        function toggleShortlist(id) {
+            if(shortlists.includes(id)) {
+                shortlists = shortlists.filter(x => x !== id);
+            } else {
+                shortlists.push(id);
+            }
+            syncStorage();
+            renderPrograms();
+            renderDashboardWidgets();
+        }
+
+        // Quick Apply trigger context route
+        function quickApplySelect(univName) {
+            switchTab('dashboard-tab');
+            document.getElementById('app-target').value = univName;
+        }
+
+        // Fill data values inside dashboard tracking lists
+        function renderDashboardWidgets() {
+            // Dropdown updates
+            const selectEl = document.getElementById('app-target');
+            selectEl.innerHTML = '';
+            programs.forEach(p => {
+                selectEl.innerHTML += `<option value="${p.university}">${p.university} (${p.country})</option>`;
+            });
+
+            // Shortlisted list rendering
+            const savedList = document.getElementById('saved-programs-list');
+            savedList.innerHTML = '';
+            
+            const savedData = programs.filter(p => shortlists.includes(p.id));
+            if(savedData.length === 0) {
+                savedList.innerHTML = `<p class="italic text-center py-4 bg-gray-50 rounded-lg">No shortlists saved. Navigate to "Explore Programs" to pin preferences.</p>`;
+            } else {
+                savedData.forEach(p => {
+                    savedList.innerHTML += `
+                        <div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-lg border border-gray-100">
+                            <div>
+                                <span class="font-medium text-gray-800 block text-xs">${p.university}</span>
+                                <span class="text-[10px] text-gray-400">Deadline: ${p.deadline}</span>
+                            </div>
+                            <button onclick="toggleShortlist(${p.id})" class="text-red-500 hover:text-red-700 text-xs px-1">✕</button>
+                        </div>
+                    `;
+                });
+            }
+
+            // Student Status table updating
+            const tbody = document.getElementById('student-applications-table');
+            tbody.innerHTML = '';
+            
+            if(applications.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-xs italic text-gray-400">No records filed under this active session browser state.</td></tr>`;
+            } else {
+                applications.forEach(app => {
+                    let badgeColor = "bg-yellow-100 text-yellow-800";
+                    if(app.status === "Approved") badgeColor = "bg-green-100 text-green-800";
+                    if(app.status === "Rejected") badgeColor = "bg-red-100 text-red-800";
+
+                    tbody.innerHTML += `
+                        <tr class="border-b border-gray-100 hover:bg-gray-50/50">
+                            <td class="py-3 px-4 font-mono text-xs">#LPU-${app.id}</td>
+                            <td class="py-3 px-4 font-medium text-gray-900">${app.target}</td>
+                            <td class="py-3 px-4 text-xs">${app.date}</td>
+                            <td class="py-3 px-4">
+                                <span class="px-2 py-0.5 rounded text-xs font-semibold ${badgeColor}">${app.status}</span>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        // Render administrative view layers
+        function renderAdminWorkspace() {
+            const table = document.getElementById('admin-applications-table');
+            table.innerHTML = '';
+
+            if(applications.length === 0) {
+                table.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-gray-400">No student enrollment logs submitted yet.</td></tr>`;
+                return;
+            }
+
+            applications.forEach(app => {
+                table.innerHTML += `
+                    <tr class="border-b border-gray-200 hover:bg-gray-50 text-xs">
+                        <td class="py-3 px-4 font-mono font-semibold">${app.regNo}</td>
+                        <td class="py-3 px-4 font-medium text-gray-900">${app.name}</td>
+                        <td class="py-3 px-4"><span class="bg-gray-100 px-2 py-0.5 rounded font-mono">${app.cgpa}</span></td>
+                        <td class="py-3 px-4">${app.target}</td>
+                        <td class="py-3 px-4 max-w-xs truncate" title="${app.sop}">${app.sop}</td>
+                        <td class="py-3 px-4 text-right space-x-1 whitespace-nowrap">
+                            ${app.status === 'Pending' ? `
+                                <button onclick="setAppStatus(${app.id}, 'Approved')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2 py-1 rounded text-[10px] cursor-pointer">Approve</button>
+                                <button onclick="setAppStatus(${app.id}, 'Rejected')" class="bg-red-600 hover:bg-red-700 text-white font-bold px-2 py-1 rounded text-[10px] cursor-pointer">Reject</button>
+                            ` : `
+                                <span class="text-xs font-bold text-gray-400 italic">${app.status}</span>
+                            `}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Application form submit function
+        function submitApplication(e) {
+            e.preventDefault();
+            const name = document.getElementById('app-name').value;
+            const regNo = document.getElementById('app-regno').value;
+            const cgpa = parseFloat(document.getElementById('app-cgpa').value);
+            const target = document.getElementById('app-target').value;
+            const sop = document.getElementById('app-sop').value;
+
+            // Simple validation rule matching program limits
+            const targetProg = programs.find(p => p.university === target);
+            if(targetProg && cgpa < targetProg.cgpa) {
+                alert(`⚠️ Application Alert: Your input CGPA (${cgpa}) sits under the mandatory minimum criteria (${targetProg.cgpa}) outlined by ${target}. You can still file, but rejection risks are high.`);
+            }
+
+            const newApp = {
+                id: Date.now(),
+                name,
+                regNo,
+                cgpa,
+                target,
+                sop,
+                date: new Date().toISOString().split('T')[0],
+                status: "Pending"
+            };
+
+            applications.push(newApp);
+            syncStorage();
+            
+            // Reset fields
+            document.getElementById('application-form').reset();
+            alert("🚀 Success: Your exchange program application metrics have been successfully routed to the admin desk panel!");
+            
+            renderDashboardWidgets();
+            renderAdminWorkspace();
+        }
+
+        // Administrative status action update router
+        function setAppStatus(id, newStatus) {
+            applications = applications.map(a => {
+                if(a.id === id) a.status = newStatus;
+                return a;
+            });
+            syncStorage();
+            renderDashboardWidgets();
+            renderAdminWorkspace();
+        }
+
+        // Administrative creation of new frameworks
+        function createNewProgram(e) {
+            e.preventDefault();
+            const university = document.getElementById('new-univ').value;
+            const country = document.getElementById('new-region').value;
+            const cgpa = parseFloat(document.getElementById('new-cgpa').value);
+            const deadline = document.getElementById('new-deadline').value;
+            const details = document.getElementById('new-details').value;
+
+            // Basic categorical region assignment
+            let region = "Europe";
+            if(country.toLowerCase().includes("usa") || country.toLowerCase().includes("state")) region = "USA";
+            else if(country.toLowerCase().includes("uk") || country.toLowerCase().includes("london")) region = "UK";
+            else if(country.toLowerCase().includes("canada")) region = "Canada";
+            else if(country.toLowerCase().includes("asia") || country.toLowerCase().includes("singapore") || country.toLowerCase().includes("india")) region = "Asia";
+
+            const newProg = {
+                id: Date.now(),
+                university,
+                country,
+                region,
+                cgpa,
+                deadline,
+                details
+            };
+
+            programs.push(newProg);
+            syncStorage();
+            document.getElementById('add-program-form').reset();
+            alert(`➕ Framework Published: ${university} added to global active listings.`);
+            
+            renderPrograms();
+            renderDashboardWidgets();
+        }
+
+        // Document criteria checklist details popup engine
+        function openChecklistModal(id) {
+            const prog = programs.find(p => p.id === id);
+            if(!prog) return;
+
+            document.getElementById('modal-title').innerText = `${prog.university} - Requirements Criteria`;
+            
+            const body = document.getElementById('modal-body-content');
+            body.innerHTML = `
+                <div class="bg-orange-50 text-[#F37021] p-3 rounded-lg text-xs font-semibold mb-2">
+                    📋 Core Prerequisite threshold value: ${prog.cgpa} Cumulative Grade Points.
+                </div>
+                <p class="text-xs text-gray-500 mb-3"><strong>Overview Description:</strong> ${prog.details}</p>
+                <h5 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Mandatory Steps for LPU Sections:</h5>
+                <ol class="list-decimal list-inside space-y-1 text-xs text-gray-600">
+                    <li>Submit academic SOP transcript abstract before <strong>${prog.deadline}</strong>.</li>
+                    <li>Verify mapping of target institution syllabus modules with active LPU curriculum blocks.</li>
+                    <li>Secure department HOD clearance endorsement stamp.</li>
+                    <li>Retain active attendance thresholds above 75% inside local ERP logs.</li>
+                </ol>
+            `;
+            
+            document.getElementById('checklist-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('checklist-modal').classList.add('hidden');
+        }
+
+        // Factory reset function
+        function clearAllData() {
+            if(confirm("Are you sure you want to clear the portal database logs? This restores the factory default programs list.")) {
+                localStorage.clear();
+                programs = defaultPrograms;
+                applications = [];
+                shortlists = [];
+                syncStorage();
+                renderPrograms();
+                renderDashboardWidgets();
+                renderAdminWorkspace();
+            }
+        }
+
+        // Window startup initialize routing
+        window.onload = function() {
+            renderPrograms();
+            renderDashboardWidgets();
+            renderAdminWorkspace();
+        };
+    </script>
+</body>
+</html>
